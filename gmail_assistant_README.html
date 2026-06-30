@@ -1,0 +1,453 @@
+<title>Gmail Assistant — Setup Guide</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0f1117;
+    --surface:   #1a1f2e;
+    --surface2:  #232838;
+    --border:    rgba(255,255,255,0.08);
+    --text:      #e8eaf0;
+    --muted:     #8b90a0;
+    --accent:    #EA4335;
+    --accent2:   #4A8CF7;
+    --green:     #34A853;
+    --mono:      'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+    --sans:      -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 2.5rem 1.5rem 4rem;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #fff;
+    text-wrap: balance;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+  }
+
+  .tagline {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+  }
+
+  .badge.green { border-color: rgba(52,168,83,0.35); color: var(--green); background: rgba(52,168,83,0.08); }
+  .badge.blue  { border-color: rgba(74,140,247,0.35); color: var(--accent2); background: rgba(74,140,247,0.08); }
+
+  h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 2.25rem 0 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  h2::before {
+    content: '';
+    display: block;
+    width: 3px;
+    height: 1em;
+    background: var(--accent);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  p { margin-bottom: 0.75rem; color: var(--text); }
+
+  .steps { display: flex; flex-direction: column; gap: 1rem; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0 1rem;
+    align-items: start;
+  }
+
+  .step-num {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--accent2);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .step-body { padding-top: 0.15rem; }
+  .step-body strong { color: #fff; font-weight: 500; }
+  .step-body p { margin-bottom: 0.4rem; }
+
+  pre, code {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+
+  code {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #b8c0d8;
+  }
+
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    overflow-x: auto;
+    margin: 0.6rem 0 0.25rem;
+    color: #b8c0d8;
+    line-height: 1.6;
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .file-tree {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin: 0.6rem 0;
+  }
+
+  .file-tree .fname { color: var(--text); }
+  .file-tree .comment { color: #4a5168; }
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .callout.warn { border-left-color: #F9AB00; }
+  .callout strong { color: var(--text); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0;
+    font-size: 0.875rem;
+  }
+
+  th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.4rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+
+  td:first-child { font-family: var(--mono); font-size: 0.82rem; color: var(--accent2); }
+  td:last-child { color: var(--muted); font-size: 0.875rem; }
+
+  .workflow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0.75rem 0;
+  }
+
+  .wf-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wf-step:last-child { border-bottom: none; }
+
+  .wf-icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 6px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    font-family: var(--mono);
+    color: var(--accent2);
+    font-weight: 700;
+  }
+
+  .wf-label { font-size: 0.875rem; }
+  .wf-label code { font-size: 0.78rem; }
+  .wf-sub { font-size: 0.8rem; color: var(--muted); }
+</style>
+
+<header>
+  <div class="eyebrow">Open WebUI Tool</div>
+  <h1>Gmail Assistant</h1>
+  <p class="tagline">LLM-powered inbox triage — fetch, categorise, and flag emails for deletion using your local model.</p>
+  <div class="badges">
+    <span class="badge green">v0.4</span>
+    <span class="badge blue">Python</span>
+    <span class="badge">OAuth2</span>
+    <span class="badge">Gmail API</span>
+    <span class="badge">Open WebUI</span>
+  </div>
+</header>
+
+<h2>Prerequisites</h2>
+<p>Before installing the tool you need a Google Cloud project with Gmail API credentials and a mounted secrets folder in your Open WebUI Docker container.</p>
+
+<h2>1 — Google Cloud Setup</h2>
+<div class="steps">
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <strong>Create a project</strong>
+      <p>Go to <code>console.cloud.google.com</code> → project dropdown → <strong>New Project</strong>. Name it anything (e.g. <code>openwebui-gmail</code>).</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <strong>Enable Gmail API</strong>
+      <p>APIs &amp; Services → Library → search <code>Gmail API</code> → Enable.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <strong>Configure OAuth consent screen</strong>
+      <p>APIs &amp; Services → OAuth consent screen → External → Create. Fill in app name and your email. On the Test Users screen add your Gmail address. Save through all steps.</p>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <strong>Create OAuth credentials</strong>
+      <p>APIs &amp; Services → Credentials → + Create Credentials → OAuth client ID → Desktop app. Download the JSON file and place it in your secrets folder:</p>
+      <pre><code>mv ~/Downloads/client_secret_*.json ~/llm_local_gmail_creds/cred_llm_local.json
+touch ~/llm_local_gmail_creds/cred_llm_token.json</code></pre>
+    </div>
+  </div>
+</div>
+
+<h2>2 — Docker Volume Mount</h2>
+<p>The secrets folder must be mounted into the Open WebUI container. Stop and recreate with the extra volume:</p>
+<pre><code>docker stop open-webui && docker rm open-webui
+
+docker run -d \
+  --name open-webui \
+  -p 3000:8080 \
+  -e WEBUI_AUTH=False \
+  -v open-webui:/app/backend/data \
+  -v $HOME/llm_local_gmail_creds:/llm_local_gmail_creds \
+  --restart always \
+  ghcr.io/open-webui/open-webui:main</code></pre>
+
+<div class="callout">Your conversation history and settings live in the named volume <code>open-webui</code> and are not affected by recreating the container.</div>
+
+<h2>3 — First-time Authentication</h2>
+<p>Run this once on your Mac to complete the Google OAuth flow and save the token:</p>
+<pre><code>/opt/homebrew/bin/python3.10 -m pip install google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+cat > /tmp/gmail_auth.py << 'EOF'
+from google_auth_oauthlib.flow import InstalledAppFlow
+import os
+flow = InstalledAppFlow.from_client_secrets_file(
+    os.path.expanduser('~/llm_local_gmail_creds/cred_llm_local.json'),
+    ['https://www.googleapis.com/auth/gmail.modify']
+)
+creds = flow.run_local_server(port=0)
+open(os.path.expanduser('~/llm_local_gmail_creds/cred_llm_token.json'),'w').write(creds.to_json())
+print('Token saved.')
+EOF
+
+/opt/homebrew/bin/python3.10 /tmp/gmail_auth.py</code></pre>
+<p>A browser window opens — log in with Google and approve access. The token is saved to the mounted folder and is immediately visible inside Docker. <strong>You will not need to do this again</strong> — the tool refreshes the token automatically.</p>
+
+<h2>4 — Install in Open WebUI</h2>
+<div class="steps">
+  <div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body"><strong>Open</strong> Open WebUI → Workspace → Tools → + New Tool</div>
+  </div>
+  <div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body"><strong>Paste</strong> the full contents of <code>gmail_assistant.py</code> and click Save. Dependencies install automatically.</div>
+  </div>
+  <div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body"><strong>Create a model</strong> — Workspace → Models → + New Model named <code>Email Assistant</code>, base model <code>qwen3-4b</code>, tools: Gmail Assistant enabled, system prompt below.</div>
+  </div>
+</div>
+
+<h3>System Prompt</h3>
+<pre><code>You are an email triage assistant. When asked to process emails:
+1. Call get_processing_options() and present the two choices to the user
+2. Wait for the user to choose, then call fetch_unprocessed_emails(mode)
+3. Call categorise_email() for EACH email using its EXACT id — never placeholders
+4. For emails where auto_to_delete is true, always set to_delete=true
+5. After each batch fetch the next if more_remaining is true
+6. When done, call get_summary() and present the results
+7. Never call fetch_unprocessed_emails() more than 20 times in one session</code></pre>
+
+<h2>5 — Persistent Files</h2>
+<div class="file-tree">
+  ~/llm_local_gmail_creds/<br>
+  ├── <span class="fname">cred_llm_local.json</span>  <span class="comment">← OAuth credentials from Google Cloud</span><br>
+  ├── <span class="fname">cred_llm_token.json</span>   <span class="comment">← OAuth token (auto-refreshed)</span><br>
+  ├── <span class="fname">state.json</span>             <span class="comment">← last run timestamp + total count</span><br>
+  └── <span class="fname">email_log.md</span>           <span class="comment">← full history of all decisions</span>
+</div>
+<p>All files live on your Mac and survive Docker container restarts or rebuilds.</p>
+
+<h2>Usage</h2>
+<p>Select the <strong>Email Assistant</strong> model in Open WebUI and send:</p>
+<pre><code>Process my emails</code></pre>
+
+<div class="workflow">
+  <div class="wf-step">
+    <div class="wf-icon">fn</div>
+    <div>
+      <div class="wf-label"><code>get_processing_options()</code></div>
+      <div class="wf-sub">Returns last run date and email counts for both modes</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-icon">↓</div>
+    <div>
+      <div class="wf-label">Model asks: <em>resume from last run (N emails) or last 24h only (N emails)?</em></div>
+      <div class="wf-sub">You choose</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-icon">fn</div>
+    <div>
+      <div class="wf-label"><code>fetch_unprocessed_emails(mode)</code></div>
+      <div class="wf-sub">Returns batches of 5 emails with auto_to_delete hints</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-icon">fn</div>
+    <div>
+      <div class="wf-label"><code>categorise_email()</code> × 5</div>
+      <div class="wf-sub">Applies Gmail labels, appends one line to email_log.md</div>
+    </div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-icon">fn</div>
+    <div>
+      <div class="wf-label"><code>get_summary()</code></div>
+      <div class="wf-sub">Reads the log and presents the final triage report</div>
+    </div>
+  </div>
+</div>
+
+<h2>Available Functions</h2>
+<table>
+  <tr><th>Function</th><th>Description</th></tr>
+  <tr><td>get_processing_options()</td><td>Read state and count pending emails — call first</td></tr>
+  <tr><td>fetch_unprocessed_emails(mode)</td><td>Fetch next batch. mode: last_24h or since_last_run</td></tr>
+  <tr><td>categorise_email()</td><td>Apply label + log decision. Returns minimal confirmation</td></tr>
+  <tr><td>get_summary()</td><td>Return session log for final report</td></tr>
+  <tr><td>get_todelete_summary()</td><td>List all emails currently in AI-ToDelete</td></tr>
+</table>
+
+<h2>Gmail Labels Created</h2>
+<table>
+  <tr><th>Label</th><th>Purpose</th></tr>
+  <tr><td>AI-Processed</td><td>Applied to every email seen — prevents re-processing</td></tr>
+  <tr><td>AI-ToDelete</td><td>Staged for manual deletion — review before emptying</td></tr>
+  <tr><td>AI/Important</td><td>Category labels nested under AI/</td></tr>
+  <tr><td>AI/Work</td><td></td></tr>
+  <tr><td>AI/Newsletter</td><td></td></tr>
+  <tr><td>AI/Promotion</td><td></td></tr>
+  <tr><td>AI/Spam</td><td></td></tr>
+  <tr><td>AI/Receipt</td><td></td></tr>
+  <tr><td>AI/Other</td><td></td></tr>
+</table>
+
+<div class="callout warn" style="margin-top:2rem">
+  <strong>Note:</strong> Emails moved to AI-ToDelete are removed from your inbox but not permanently deleted. Review the label in Gmail and empty it manually when satisfied.
+</div>
